@@ -3,7 +3,7 @@ const dotenv = require("dotenv");
 dotenv.config("./.env");
 
 module.exports = async() => {
-    const mongoUri = `mongodb+srv://aakanksha:x9jlbwOnVY4s8osr@cluster0.bo6yofb.mongodb.net/?retryWrites=true&w=majority`;
+    const mongoUri = process.env.MONGODB_URI;
     
     try {
         const connect = await mongoose.connect(
