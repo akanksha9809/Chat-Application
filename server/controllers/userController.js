@@ -34,3 +34,4 @@ const currentUser = req._id;
 */
 
 //req.user._id vs req._id
+// async keyword
