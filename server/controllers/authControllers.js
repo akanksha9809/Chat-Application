@@ -37,9 +37,9 @@ const signupController = async(req,res) => {
 
 const loginController = async(req,res) => {
     try {
-        const {email, password} = req.body; //because of middleware (body parser)
+        const {name, email, password} = req.body; //because of middleware (body parser)
 
-        if(!email || !password){
+        if(!name || !email || !password){
             return res.send(error(400, "All fields are required!"))
         }
 
@@ -120,7 +120,7 @@ const logoutController = async (req, res) => {
 const generateAccessToken = (data) => {
     try {
         const token = jwt.sign(data, process.env.ACCESS_TOKEN_PRIVATE_KEY, {
-            expiresIn: "1d", 
+            expiresIn: "10d", 
         });
         console.log(token);
         return token;
