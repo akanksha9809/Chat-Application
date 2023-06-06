@@ -48,6 +48,25 @@ const accessChat = async (req, res) => {
   }
 };
 
+const fetchChats = async (req, res) => {
+  try {
+    Chat.find({ users: { $elemMatch: { $eq: req._id } } })
+      .populate("users", "-password")
+      .populate("groupAdmin", "-password")
+      .populate("latestMessage")
+      .sort({ updatedAt: -1 })
+      .then(async (results) => {
+        results = await User.populate(results, {
+          path: "latestMessage.sender",
+          select: "name email",
+        });
+        return res.send(success(200, results));
+      });
+  } catch (e) {
+    return res.send(error(500, e.message));
+  }
+};
+
 //group chat
 const createGroupChat = async (req, res) => {
   const { name, users } = req.body;
@@ -104,28 +123,69 @@ const renameGroup = async (req, res) => {
   }
 };
 
-const fetchChats = async (req, res) => {
-    try {
-        Chat.find({users:{$elemMatch:{$eq:req._id}}})
-        .populate("users", "-password")
-        .populate("groupAdmin", "-password")
-        .populate("latestMessage")
-        .sort({updatedAt:-1})
-        .then(async(results)=>{
-            results=await User.populate(results, {
-                path:"latestMessage.sender",
-                select:"name email"
-            })
-            return res.send(success(200, results));
-        })
-    } catch (e) {
-        return res.send(error(500, e.message));
+const addToGroup = async (req, res) => {
+  const { chatId, userId } = req.body;
+
+  const chat = await Chat.findById(chatId)
+    .populate("users", "-password")
+    .populate("groupAdmin", "-password");
+
+  if (!chat) {
+    //NULL
+    return res.send(error(404, "Chat not found"));
+  }
+
+  /*
+    
+    if (chat.users.includes(userId)) {//values are not being compared correctly
+    return res.send(error(400, "User is already in the group"));
     }
+  */
+
+  //convert userId to string
+  const stringUserId = userId.toString();
+
+  //check if user is already present in the users array
+  if (chat.users.some((user) => user._id.toString() === stringUserId)) {
+    return res.send(error(400, "User is already in the group"));
+  }
+  chat.users.push(userId);
+  await chat.save();
+  return res.send(success(200, chat));
+};
+
+const removeFromGroup = async (req, res) => {
+    const { chatId, userId } = req.body;
+
+    const chat = await Chat.findById(chatId)
+    .populate("users", "-password")
+    .populate("groupAdmin", "-password");
+
+  if (!chat) {
+    //NULL
+    return res.send(error(404, "Chat not found"));
+  }
+
+  //convert userId to string
+  const stringUserId = userId.toString();
+
+  //check if user is already present in the users array
+  if (!chat.users.some((user) => user._id.toString() === stringUserId)) {
+    return res.send(error(400, "User is not in the group"));
+  }
+
+  //remove the user from the users array
+  chat.users.pull(userId);
+  await chat.save();
+
+  return res.send(success(200, chat));
 };
 
 module.exports = {
   accessChat,
+  fetchChats,
   createGroupChat,
   renameGroup,
-  fetchChats,
+  addToGroup,
+  removeFromGroup,
 };
