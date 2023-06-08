@@ -18,20 +18,3 @@ const allUsers = async (req, res) => {
 module.exports = {
   allUsers,
 };
-
-/*
-
-Jatin Kushwah7:48 PM
-const currentUser = req._id;
-
-        const users = req.query.search
-            ? await User.find({
-                  username: { $regex: req.query.search, $options: "i" },
-                  email: { $regex: req.query.search, $options: "i" },
-                  _id: { $ne: currentUser },
-              })
-            : null;
-*/
-
-//req.user._id vs req._id
-// async keyword

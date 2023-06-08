@@ -33,38 +33,19 @@ const sendMessage = async (req, res) => {
   }
 };
 
-/*
-const sendMessage = async (req, res) => {
-  const { chatId, content } = req.body;
-
-  if (!chatId || !content) {
-    return res.send(error(400, "Inavalid data passed into request"));
-  }
-
-  var newMessage = {
-    sender: req._id,
-    content: content,
-    chat: chatId,
-  };
-
+const allMessage = async (req, res) => {
   try {
-    var message = await Message.create(newMessage);
-    message = await message.populate("sender", "name pic");
-    message = await message.populate("chat");
-    message = await User.populate(message, {
-      path: "chat.users",
-      select: "name pic email ",
-    });
-
-    await Chat.findByIdAndUpdate(req.body.chatId, {
-      latestMessage: message,
-    });
-    return res.send(success(200, message));
+    const messages = await Message.find({ chat: req.params.chatId })
+    .populate("sender", "name pic email")
+    .populate("chat");
+    return res.send(success(200, messages));
   } catch (e) {
     return res.send(error(500, e.message));
   }
-};*/
+
+};
 
 module.exports = {
   sendMessage,
+  allMessage,
 };

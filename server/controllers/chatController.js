@@ -135,13 +135,6 @@ const addToGroup = async (req, res) => {
     return res.send(error(404, "Chat not found"));
   }
 
-  /*
-    
-    if (chat.users.includes(userId)) {//values are not being compared correctly
-    return res.send(error(400, "User is already in the group"));
-    }
-  */
-
   //convert userId to string
   const stringUserId = userId.toString();
 
