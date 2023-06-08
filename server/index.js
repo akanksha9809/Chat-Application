@@ -4,6 +4,7 @@ const dbConnect = require("./dbConnect");
 const authRouter = require("./routers/authRouter");
 const userRouter = require("./routers/userRouter");
 const chatRouter = require("./routers/chatRouter");
+const messageRouter = require("./routers/messageRouter");
 const morgan = require("morgan");
 
 dotenv.config("./env");
@@ -18,6 +19,7 @@ app.use(morgan("common")); //logs which api is hit
 app.use("/auth", authRouter);
 app.use("/user", userRouter);
 app.use("/chat", chatRouter);
+app.use("/message", messageRouter);
 
 app.get("/", (req, res) => {
   res.status(200).send("OK from server");
