@@ -1,0 +1,42 @@
+.signup {
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  
+    .signup-box {
+      padding: 40px;
+      min-width: 300px;
+      border: 1px solid black;
+    }
+  
+    label,
+    input {
+      display: block;
+      width: 100%;
+    }
+  
+    label {
+      font-weight: bold;
+      padding-block: 8px;
+    }
+  
+    input {
+      padding: 8px 16px;
+      border-radius: 4px;
+      border: 1px solid black;
+    }
+  
+    .submit {
+      background-color: #29b4ff;
+      color: white;
+      border: none;
+      margin-top: 16px;
+      font-weight: bold;
+    }
+  
+    .submit:hover {
+      background-color: #294dde;
+    }
+  }
+  
