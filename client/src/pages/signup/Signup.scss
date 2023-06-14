@@ -1,42 +1,220 @@
 .signup {
-    height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  
-    .signup-box {
-      padding: 40px;
-      min-width: 300px;
-      border: 1px solid black;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #23242a;
+
+  .signup-box {
+    position: relative;
+    width: 380px;
+    height: 520px; //420
+    background-color: #1c1c1c;
+    border-radius: 8px;
+    overflow: hidden;
+
+    // &::before {
+    //   content: "";
+    //   position: absolute;
+    //   top: -50%;
+    //   left: -50%;
+    //   width: 380px;
+    //   height: 520px; //420
+    //   background: linear-gradient(
+    //     0deg,
+    //     transparent,
+    //     transparent,
+    //     #45f3ff,
+    //     #45f3ff,
+    //     #45f3ff
+    //   );
+    //   z-index: 1;
+    //   transform-origin: bottom right;
+    //   animation: animate 6s linear infinite;
+    // }
+
+    // &::after {
+    //   content: "";
+    //   position: absolute;
+    //   top: -50%;
+    //   left: -50%;
+    //   width: 380px;
+    //   height: 520px; //420
+    //   background: linear-gradient(
+    //     0deg,
+    //     transparent,
+    //     transparent,
+    //     #45f3ff,
+    //     #45f3ff,
+    //     #45f3ff
+    //   );
+    //   z-index: 1;
+    //   transform-origin: bottom right;
+    //   animation: animate 6s linear infinite;
+    //   animation-delay: -3s;
+    // }
+
+    // .border-line {
+    //   position: absolute;
+    //   top: 0;
+    //   inset: 0;
+
+    //   &::before {
+    //     content: "";
+    //     position: absolute;
+    //     top: -50%;
+    //     left: -50%;
+    //     width: 380px;
+    //     height: 520px; //420
+    //     background: linear-gradient(
+    //       0deg,
+    //       transparent,
+    //       transparent,
+    //       #ff2770,
+    //       #ff2770,
+    //       #ff2770
+    //     );
+    //     z-index: 1;
+    //     transform-origin: bottom right;
+    //     animation: animate 6s linear infinite;
+    //     animation-delay: -1.5s;
+    //   }
+
+    //   &::after {
+    //     content: "";
+    //     position: absolute;
+    //     top: -50%;
+    //     left: -50%;
+    //     width: 380px;
+    //     height: 520px; //420
+    //     background: linear-gradient(
+    //       0deg,
+    //       transparent,
+    //       transparent,
+    //       #ff2770,
+    //       #ff2770,
+    //       #ff2770
+    //     );
+    //     z-index: 1;
+    //     transform-origin: bottom right;
+    //     animation: animate 6s linear infinite;
+    //     animation-delay: -4.5s;
+    //   }
+    // }
+
+    @keyframes animate {
+      0% {
+        transform: rotate(0deg);
+      }
+      100% {
+        transform: rotate(360deg);
+      }
     }
-  
-    label,
-    input {
-      display: block;
-      width: 100%;
+
+    form {
+      position: absolute; // will be positioned relative to the .signup-box container.
+      inset: 4px; //sets the distance of the form element from all four edges of the .signup-box
+      background-color: #222;
+      padding: 50px 40px;
+      border-radius: 8px;
+      z-index: 2;
+      display: flex;
+      flex-direction: column;
+
+      h2 {
+        color: #fff;
+        font-weight: 500;
+        text-align: center;
+        letter-spacing: 0.1em;
+      }
+
+      .inputBox {
+        position: relative;
+        width: 300px;
+        margin-top: 35px;
+
+        input {
+          position: relative;
+          width: 100%;
+          padding: 20px 10px 10px;
+          background: transparent;
+          outline: none;
+          border: none;
+          box-shadow: none;
+          color: #23242a;
+          font-size: 1em;
+          letter-spacing: 0.05em;
+          transition: 0.5s;
+          z-index: 10;
+        }
+
+        span {
+          position: absolute;
+          left: 0;
+          padding: 20px 0px 10px;
+          pointer-events: none; //should not respond to pointer events, such as mouse clicks or hover effects
+          color: #8f8f8f;
+          font-size: 1em;
+          letter-spacing: 0.05em;
+          transition: 0.5s;
+        }
+
+        //with the sibling combinator (~)
+        //styles for the span element when the input is valid
+        input:valid ~ span,
+        input:focus ~ span {
+          color: #fff;
+          font-size: 0.75em;
+          transform: translateY(-34px);
+        }
+
+        i {
+          position: absolute;
+          left: 0;
+          bottom: 0;
+          width: 100%;
+          height: 2px;
+          background: #fff;
+          border-radius: 4px;
+          overflow: hidden;
+          transition: 0.5s;
+          pointer-events: none;
+        }
+        input:valid ~ i,
+        input:focus ~ i {
+          height: 44px;
+        }
+      }
     }
-  
-    label {
-      font-weight: bold;
-      padding-block: 8px;
-    }
-  
-    input {
-      padding: 8px 16px;
-      border-radius: 4px;
-      border: 1px solid black;
-    }
-  
-    .submit {
-      background-color: #29b4ff;
-      color: white;
+
+    input[type="submit"] {
       border: none;
-      margin-top: 16px;
-      font-weight: bold;
+      outline: none;
+      padding: 9px 25px;
+      background-color: #fff;
+      cursor: pointer;
+      font-size: 0.9em;
+      border-radius: 4px;
+      font-size: 600;
+      width: 100px;
+      margin-top: 10px;
     }
-  
-    .submit:hover {
-      background-color: #294dde;
+
+    p {
+      display: flex;
+      justify-content: space-between;
+      margin: 10px 0px;
+      font-size: 0.75em;
+      color: #8f8f8f;
+      text-decoration: none;
+
+      .link {
+        text-decoration: none;
+
+        &:visited {
+          color: white;
+        }
+      }
     }
   }
-  
+}

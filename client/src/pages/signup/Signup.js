@@ -23,37 +23,48 @@ function Signup() {
   return (
     <div className="signup">
       <div className="signup-box">
-        <h2 className="heading">Sign Up</h2>
+        <span className="border-line"></span>
         <form onSubmit={handleSubmit}>
-          <label htmlFor="name">Name</label>
-          <input
-            type="text"
-            className="name"
-            id="name"
-            onChange={(e) => setName(e.target.value)}
-          />
+          <h2 className="heading">Sign Up</h2>
 
-          <label htmlFor="email">Email</label>
-          <input
-            type="email"
-            className="email"
-            id="email"
-            onChange={(e) => setEmail(e.target.value)}
-          />
+          <div className="inputBox">
+            <input
+              type="text"
+              required="required"
+              onChange={(e) => setName(e.target.value)}
+            />
+            <span>Username</span>
+            <i></i>
+          </div>
 
-          <label htmlFor="password">Password</label>
-          <input
-            type="password"
-            className="password"
-            id="password"
-            onChange={(e) => setPassword(e.target.value)}
-          />
+          <div className="inputBox">
+            <input
+              type="email"
+              required="required"
+              onChange={(e) => setEmail(e.target.value)}
+            />
+            <span>Email</span>
+            <i></i>
+          </div>
 
+          <div className="inputBox">
+            <input
+              type="password"
+              required="required"
+              onChange={(e) => setPassword(e.target.value)}
+            />
+            <span>Password</span>
+            <i></i>
+          </div>
+
+          <p className="subheading">
+            Do not have an account?{" "}
+            <Link to="/login" className="link">
+              Log In
+            </Link>
+          </p>
           <input type="submit" className="submit" />
         </form>
-        <p className="subheading">
-          Do not have an account? <Link to="/login">Log In</Link>
-        </p>
       </div>
     </div>
   );

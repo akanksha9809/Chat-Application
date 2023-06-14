@@ -2,24 +2,25 @@ import React, { useState } from "react";
 import "./Login.scss";
 import { Link, useNavigate } from "react-router-dom";
 import { axiosClient } from "../../utils/axiosClient";
+import { KEY_ACCESS_TOKEN, setItem } from "../../utils/localStorageManager";
 
 function Login() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const useNavigate = useNavigate();
+  const navigate = useNavigate();
 
   async function handleSubmit(e) {
     try {
       e.preventDefault();
-      const result = await axiosClient.post("/auth/login", {
+      const response = await axiosClient.post("/auth/login", {
         name,
         email,
         password,
       });
       setItem(KEY_ACCESS_TOKEN, response.result.accessToken);
       navigate("/");
-      console.log(result);
+      console.log(response);
     } catch (error) {
       console.log(error);
     }
@@ -27,37 +28,48 @@ function Login() {
   return (
     <div className="login">
       <div className="login-box">
-        <h2 className="heading">Login</h2>
+        <span className="border-line"></span>
         <form onSubmit={handleSubmit}>
-          <label htmlFor="name">Name</label>
-          <input
-            type="text"
-            className="name"
-            id="name"
-            onChange={(e) => setName(e.target.value)}
-          />
+          <h2 className="heading">Log In</h2>
 
-          <label htmlFor="email">Email</label>
-          <input
-            type="email"
-            className="email"
-            id="email"
-            onChange={(e) => setEmail(e.target.value)}
-          />
+          <div className="inputBox">
+            <input
+              type="text"
+              required="required"
+              onChange={(e) => setName(e.target.value)}
+            />
+            <span>Username</span>
+            <i></i>
+          </div>
 
-          <label htmlFor="password">Password</label>
-          <input
-            type="password"
-            className="password"
-            id="password"
-            onChange={(e) => setPassword(e.target.value)}
-          />
+          <div className="inputBox">
+            <input
+              type="email"
+              required="required"
+              onChange={(e) => setEmail(e.target.value)}
+            />
+            <span>Email</span>
+            <i></i>
+          </div>
 
+          <div className="inputBox">
+            <input
+              type="password"
+              required="required"
+              onChange={(e) => setPassword(e.target.value)}
+            />
+            <span>Password</span>
+            <i></i>
+          </div>
+
+          <p className="subheading">
+            Do not have an account?{" "}
+            <Link to="/signup" className="link">
+              Sign Up
+            </Link>
+          </p>
           <input type="submit" className="submit" />
         </form>
-        <p className="subheading">
-          Do not have an account? <Link to="/signup">Sign Up</Link>{" "}
-        </p>
       </div>
     </div>
   );
