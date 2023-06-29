@@ -1,0 +1,15 @@
+.chatListItem-container {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  height: 90px;
+  gap: 15px;
+  padding-left: 10px;
+  color: white;
+  border-bottom: 1px solid #4a4e51;
+  overflow: auto;
+
+  &:hover {
+    background-color: #2b2b3e;
+  }
+}

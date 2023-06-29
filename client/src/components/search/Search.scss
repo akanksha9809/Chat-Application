@@ -1,0 +1,29 @@
+.search-container {
+  display: flex;
+  align-items: center;
+  justify-self: center;
+
+  width: 80%;
+  //background-color: red;
+
+  .search {
+    display: flex;
+    align-items: center;
+    justify-self: center;
+    width: 100%;
+    background-color: var(--black);
+    border-radius: 10px;
+    padding: 5px;
+    margin-bottom: 1.5rem;
+    border: 1px solid #4a4e51;
+    input {
+      border: none;
+      display: flex;
+      flex-grow: 1;
+      background-color: var(--black);
+    }
+    input:focus {
+      outline: none;
+    }
+  }
+}

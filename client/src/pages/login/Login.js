@@ -3,14 +3,20 @@ import "./Login.scss";
 import { Link, useNavigate } from "react-router-dom";
 import { axiosClient } from "../../utils/axiosClient";
 import { KEY_ACCESS_TOKEN, setItem } from "../../utils/localStorageManager";
+import { useDispatch } from "react-redux";
+import { setUser } from "../../redux/slices/authSlice";
 
 function Login() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   async function handleSubmit(e) {
+    const loggedinUser = [name, email];
+    dispatch(setUser(loggedinUser));
+    // console.log("Dispatched setUser action:", setUser(loggedinUser));
     try {
       e.preventDefault();
       const response = await axiosClient.post("/auth/login", {
@@ -18,8 +24,10 @@ function Login() {
         email,
         password,
       });
+
       setItem(KEY_ACCESS_TOKEN, response.result.accessToken);
       navigate("/");
+
       console.log(response);
     } catch (error) {
       console.log(error);

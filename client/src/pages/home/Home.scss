@@ -1,0 +1,7 @@
+.home-container {
+  width: 100%;
+  .home {
+    display: grid;
+    grid-template-columns: 0.5fr 3.5fr 6fr;
+  }
+}

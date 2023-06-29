@@ -1,0 +1,10 @@
+.mychat {
+  height: 100vh;
+  background-color:  #1d1d2a;
+  
+  .mychat-box {
+    display: grid;
+    grid-template-rows: 1fr 9fr;
+    width: 100%;
+  }
+}
