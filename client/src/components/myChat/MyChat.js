@@ -3,30 +3,45 @@ import "./MyChat.scss";
 import Search from "../search/Search";
 import ChatListItem from "../chatListItem/ChatListItem";
 import { useDispatch, useSelector } from "react-redux";
-import { getMyChat } from "../../redux/slices/chatSlice";
+import { getMyChat, setSelectedChat } from "../../redux/slices/chatSlice";
+import { getLoggedUser } from "../../redux/slices/authSlice";
+import GroupChatModal from "../miscellaneous/GroupChatModal";
 
 function MyChat() {
   const dispatch = useDispatch();
   const myChatData = useSelector((state) => state.chatDataReducer.myChatData);
-  const [name, email] = useSelector((state) => state.authDataReducer.user);
+  const loggedUser = useSelector((state) => state.authDataReducer.loggedUser);
 
-  console.log("name->", email);
+  // console.log("name->", email);
 
   useEffect(() => {
     dispatch(getMyChat());
+    dispatch(getLoggedUser());
   }, [dispatch]);
 
   return (
     <div className="mychat">
       <div className="mychat-box">
         <Search />
+        <div className="mid-section">
+          <h3>My chats</h3>
+          <GroupChatModal>
+            <button class="glow-on-hover" type="button">
+              New Group Chat +
+            </button>
+          </GroupChatModal>
+        </div>
         <div className="list">
           {myChatData ? (
             myChatData.map((chatItem) => (
               <ChatListItem
                 key={chatItem._id}
                 chatItem={chatItem}
-                loggedUserMail={email}
+                loggedUser={loggedUser}
+                onClick={
+                  () => setSelectedChat(chatItem._id)
+                  // console.log("mychat!!!!!!!!!!!!!!!!! ->", chatItem._id)
+                }
               />
             ))
           ) : (
