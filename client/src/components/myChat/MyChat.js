@@ -26,8 +26,8 @@ function MyChat() {
         <div className="mid-section">
           <h3>My chats</h3>
           <GroupChatModal>
-            <button class="glow-on-hover" type="button">
-              New Group Chat +
+            <button className="glow-on-hover" type="button">
+              + New Group
             </button>
           </GroupChatModal>
         </div>

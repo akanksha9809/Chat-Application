@@ -10,14 +10,8 @@ function Home() {
   return (
     <Grid templateColumns="0.5fr 3.5fr 6fr">
       <Sidebar />
-      
-      <div className="routes-container">
-        <Routes>
-          <Route path="/" element={<MyChat />} />
-          <Route path="/search" element={<MyChat />} />
-          <Route path="/mychat" element={<MyChat />} />
-        </Routes>
-      </div>
+
+      <MyChat />
       <SingleChat />
     </Grid>
   );

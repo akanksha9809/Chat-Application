@@ -13,7 +13,8 @@ const allUsers = async (req, res) => {
     : {};
 
   const users = await User.find(keyword).find({ _id: { $ne: req._id } });
-  res.send(users);
+  // res.send(users);
+  return res.send(success(200, users));
 };
 
 // get => /getLoggedUser
