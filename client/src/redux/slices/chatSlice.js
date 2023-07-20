@@ -16,11 +16,18 @@ const chatSlice = createSlice({
   initialState: {
     myChatData: [],
     selectedChat: {},
+    fetchAgain: false,
   },
   reducers: {
     setSelectedChat: (state, action) => {
       state.selectedChat = action.payload;
-      // console.log(action.payload);
+      //console.log(action.payload);
+    },
+    setMyChatData: (state, action) => {
+      state.myChatData = action.payload;
+    },
+    setFetchAgain: (state, action) => {
+      state.fetchAgain = action.payload;
     },
   },
   extraReducers: (builder) => {
@@ -32,4 +39,5 @@ const chatSlice = createSlice({
 
 export default chatSlice.reducer;
 
-export const { setSelectedChat } = chatSlice.actions;
+export const { setSelectedChat, setMyChatData, setFetchAgain } =
+  chatSlice.actions;

@@ -82,14 +82,14 @@ const createGroupChat = async (req, res) => {
     );
   }
 
-  addUsers.push(req.user);
+  addUsers.push(req._id);
 
   try {
     const groupChat = await Chat.create({
       chatName: name,
       users: addUsers,
       isGroupChat: true,
-      groupAdmin: req.user,
+      groupAdmin: req._id,
     });
 
     const fullGroupChat = await Chat.findOne({ _id: groupChat._id })
@@ -148,9 +148,9 @@ const addToGroup = async (req, res) => {
 };
 
 const removeFromGroup = async (req, res) => {
-    const { chatId, userId } = req.body;
+  const { chatId, userId } = req.body;
 
-    const chat = await Chat.findById(chatId)
+  const chat = await Chat.findById(chatId)
     .populate("users", "-password")
     .populate("groupAdmin", "-password");
 

@@ -19,6 +19,8 @@ import { useState } from "react";
 import { axiosClient } from "../../utils/axiosClient";
 import UserListItem from "./UserListItem";
 import UserBadgeItem from "./UserBadgeItem";
+import { useDispatch, useSelector } from "react-redux";
+import { setMyChatData } from "../../redux/slices/chatSlice";
 
 function GroupChatModal({ children }) {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -28,6 +30,8 @@ function GroupChatModal({ children }) {
   const [searchResult, setSearchResult] = useState([]);
   const [loading, setLoading] = useState(false);
   const toast = useToast();
+  const dispatch = useDispatch();
+  const myChatData = useSelector((state) => state.chatDataReducer.myChatData);
 
   const handleSearch = async (query) => {
     setSearchQuery(query);
@@ -47,7 +51,50 @@ function GroupChatModal({ children }) {
       console.log("failed to load the chats", e);
     }
   };
-  const handleSubmit = () => {};
+
+  //api call
+  const handleSubmit = async () => {
+    if (!groupChatName || !selectedUsers) {
+      toast({
+        title: "Please fill all the details",
+        status: "warning",
+        duration: 5000,
+        isClosable: "true",
+        position: "top",
+        variant: "subtle",
+      });
+      return;
+    }
+
+    try {
+      const data = await axiosClient.post("/chat/createGroup", {
+        name: groupChatName,
+        users: JSON.stringify(selectedUsers.map((u) => u._id)),
+      });
+      // console.log(data.result);
+      // console.log(myChatData);
+      dispatch(setMyChatData([data.result, ...myChatData]));
+      onClose(); //close the modal
+      toast({
+        title: "New Group Created",
+        status: "success",
+        duration: 5000,
+        isClosable: "true",
+        position: "top",
+        variant: "subtle",
+      });
+    } catch (e) {
+      console.log(e);
+      toast({
+        title: "Failed to Create the New Group",
+        status: "warning",
+        duration: 5000,
+        isClosable: "true",
+        position: "top",
+        variant: "subtle",
+      });
+    }
+  };
   const handleDelete = (userToDelete) => {
     const updatedUsers = selectedUsers.filter(
       (item) => item._id !== userToDelete._id
@@ -78,9 +125,9 @@ function GroupChatModal({ children }) {
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
         <ModalContent>
-          <ModalHeader d="f" justifyContent="center"></ModalHeader>
+          <ModalHeader d="flex" justifyContent="center"></ModalHeader>
           <ModalCloseButton />
-          <ModalBody d="f" flexDir="column" alignItems="center">
+          <ModalBody d="flex" flexDir="column" alignItems="center">
             <FormControl>
               <Input
                 placeholder="Group Name"

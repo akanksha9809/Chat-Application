@@ -11,13 +11,16 @@ function MyChat() {
   const dispatch = useDispatch();
   const myChatData = useSelector((state) => state.chatDataReducer.myChatData);
   const loggedUser = useSelector((state) => state.authDataReducer.loggedUser);
+  const fetchAgain = useSelector(
+    (state) => state.chatDataReducer.setFetchAgain
+  );
 
   // console.log("name->", email);
 
   useEffect(() => {
     dispatch(getMyChat());
     dispatch(getLoggedUser());
-  }, [dispatch]);
+  }, [fetchAgain]);
 
   return (
     <div className="mychat">
@@ -39,7 +42,7 @@ function MyChat() {
                 chatItem={chatItem}
                 loggedUser={loggedUser}
                 onClick={
-                  () => setSelectedChat(chatItem._id)
+                  () => dispatch(setSelectedChat(chatItem))
                   // console.log("mychat!!!!!!!!!!!!!!!!! ->", chatItem._id)
                 }
               />
