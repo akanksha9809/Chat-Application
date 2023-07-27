@@ -1,0 +1,9 @@
+.chatbox-container {
+  /* //width: 100vw;  */
+  .header {
+    height: 50px;
+    color: white;
+    /* background-color: var(--dark-grey);*/
+   
+  }
+}

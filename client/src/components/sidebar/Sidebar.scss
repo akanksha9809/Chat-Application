@@ -1,6 +1,6 @@
 .sidebar {
   height: 100vh;
-  background-color: #18161f;
+  background-color: var(--black);
   border-right: 0.4pt solid #4a4e51;
   .sidebar-box {
     height: 100%;
@@ -13,6 +13,5 @@
     .sidebar-icon:hover {
       color: #595e61;
     }
-    
   }
 }

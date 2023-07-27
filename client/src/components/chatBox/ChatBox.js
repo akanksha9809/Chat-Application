@@ -1,10 +1,13 @@
 import { ArrowBackIcon } from "@chakra-ui/icons";
 import { Box, Text } from "@chakra-ui/layout";
 import { IconButton } from "@chakra-ui/react";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { setSelectedChat } from "../../redux/slices/chatSlice";
 import { getSender } from "../../config/ChatLogic";
+import { getLoggedUser } from "../../redux/slices/authSlice";
+import "./ChatBox.css";
+import UpdateGroupChatModal from "../miscellaneous/UpdateGroupChatModal";
 
 function ChatBox() {
   const selectedChat = useSelector(
@@ -15,27 +18,45 @@ function ChatBox() {
   );
   const loggedUser = useSelector((state) => state.authDataReducer.loggedUser);
   const dispatch = useDispatch();
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const handleOpenModal = (event) => {
+    setIsModalOpen(true);
+  };
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+  };
+
   return (
-    <div>
+    <div className="chatbox-container">
       {selectedChat ? (
-        <>
-          <Text color="white">
+        <div className="header" onClick={handleOpenModal}>
+          <div className="header-name">
             {selectedChat.isGroupChat ? (
               <>
-                {selectedChat.chatName.toUpperCase()}
-                {/**update modal */}
+                <span onClick={handleOpenModal}>
+                  {selectedChat.chatName.toUpperCase()}
+                </span>
+                <UpdateGroupChatModal
+                  isOpen={isModalOpen}
+                  onClose={handleCloseModal}
+                />
               </>
             ) : (
-              <>{getSender(loggedUser, selectedChat.users)}</>
+              <>
+                {console.log("chatBox", loggedUser)}
+                {console.log(selectedChat.users)}
+                {getSender(loggedUser, selectedChat.users)}
+              </>
             )}
-          </Text>
-        </>
+          </div>
+        </div>
       ) : (
         <Box
           display="flex"
           alignItems="center"
           justifyContent="center"
           h="100%"
+          padding="0"
         >
           <Text fontSize="3xl" pb={3} fontFamily="Work sans" color="white">
             Click on a user to start chatting
@@ -47,3 +68,5 @@ function ChatBox() {
 }
 
 export default ChatBox;
+
+//onClick={() => setIsModalOpen(true)} vs //onClick={setIsModalOpen(true)} inifinite rendering

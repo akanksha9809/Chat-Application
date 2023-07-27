@@ -1,6 +1,12 @@
 .singlechat {
   height: 100vh;
-  background-color: var(--black);
+  background-image: url("../../assets/peakpx.jpg");
+
+  background-size: cover;
+  background-position: center;
+
+  // background-color: #18161f;
+  // background-color: var(--black);
   .singlechat-box {
   }
 }

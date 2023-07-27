@@ -15,7 +15,7 @@ const chatSlice = createSlice({
   name: "chatSlice",
   initialState: {
     myChatData: [],
-    selectedChat: {},
+    selectedChat: null,
     fetchAgain: false,
   },
   reducers: {

@@ -14,13 +14,13 @@ function MyChat() {
   const fetchAgain = useSelector(
     (state) => state.chatDataReducer.setFetchAgain
   );
-
-  // console.log("name->", email);
+  // console.log("MyChat->", loggedUser);
 
   useEffect(() => {
+    console.log("myChat useEffect11");
     dispatch(getMyChat());
     dispatch(getLoggedUser());
-  }, [fetchAgain]);
+  }, [dispatch, fetchAgain]);
 
   return (
     <div className="mychat">

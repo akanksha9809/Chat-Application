@@ -1,6 +1,6 @@
 .mychat {
   height: 100vh;
-  background-color: #1d1d2a;
+  background-color: var(--dark-grey);
   color: white;
   .mychat-box {
     display: flex;
