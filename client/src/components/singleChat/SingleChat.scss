@@ -1,8 +1,9 @@
 .singlechat {
+  background-color: var(--black);
   height: 100vh;
-  background-image: url("../../assets/peakpx.jpg");
+  background-image: url("../../assets/pxfuel.jpg");
 
-  background-size: cover;
+  background-size:contain;
   background-position: center;
 
   // background-color: #18161f;

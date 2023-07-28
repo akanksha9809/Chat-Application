@@ -16,12 +16,12 @@ import {
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import UserBadgeItem from "./UserBadgeItem";
+import { axiosClient } from "../../utils/axiosClient";
+import { setFetchAgain, setSelectedChat } from "../../redux/slices/chatSlice";
 
 function UpdateGroupChatModal({ onClose, children }) {
   const { isOpen, onOpen, onClose: handleCloseModal } = useDisclosure(); //renaming the onClose function to handleCloseModal
-  const fetchAgain = useSelector(
-    (state) => state.chatDataReducer.setFetchAgain
-  );
+  const fetchAgain = useSelector((state) => state.chatDataReducer.fetchAgain);
   const selectedChat = useSelector(
     (state) => state.chatDataReducer.selectedChat
   );
@@ -36,17 +36,45 @@ function UpdateGroupChatModal({ onClose, children }) {
   const [renameLoading, setRenameLoading] = useState(false);
   const toast = useToast();
 
-  const handleRename = () => {};
+  console.log("check", fetchAgain);
+  const handleRename = async () => {
+    if (!groupChatName) return;
+
+    try {
+      setRenameLoading(true);
+      const data = await axiosClient.put("/chat/renameGroup", {
+        chatId: selectedChat._id,
+        chatName: groupChatName,
+      });
+
+      console.log("fetchagain data", fetchAgain);
+      dispatch(setSelectedChat(data.result)); //updated data will be set
+      dispatch(setFetchAgain(!fetchAgain)); //fetching again to get updated data
+      setRenameLoading(false);
+      setGroupChatName("");
+    } catch (error) {
+      console.log(error);
+      toast({
+        title: "Error Occured!",
+        //description: error.response.data.result.message,
+        status: "error",
+        duration: 5000,
+        isClosable: "true",
+        position: "top",
+        variant: "subtle",
+      });
+      setRenameLoading(false);
+    }
+  };
   const handleRemove = () => {};
   const handleSearch = () => {};
   return (
     <>
-      <Button onClick={onOpen}>Open Modal</Button>
+      <span onClick={onOpen}>{children}</span>
 
       <Modal isOpen={isOpen} onClose={handleCloseModal}>
         <ModalOverlay />
         <ModalContent>
-          {console.log("from updatech...", selectedChat)}
           <ModalHeader>{selectedChat.chatName}</ModalHeader>
           <ModalCloseButton />
           <ModalBody>

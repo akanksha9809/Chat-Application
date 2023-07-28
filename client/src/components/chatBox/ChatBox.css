@@ -1,9 +1,17 @@
 .chatbox-container {
-  /* //width: 100vw;  */
+  width: 100%;
+  background-color: var(--dark-grey);
   .header {
-    height: 50px;
+    height: 72px;
     color: white;
-    /* background-color: var(--dark-grey);*/
-   
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    margin-left: 10px;
+    cursor: pointer;
+    .group-name {
+      height: 100%;
+      width: 100%;
+    }
   }
 }

@@ -119,7 +119,7 @@ const renameGroup = async (req, res) => {
   if (!updatedChat) {
     return res.send(error(404, "Chat not found"));
   } else {
-    return res.send(error(200, updatedChat));
+    return res.send(success(200, updatedChat));
   }
 };
 

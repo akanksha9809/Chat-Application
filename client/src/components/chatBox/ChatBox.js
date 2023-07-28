@@ -13,9 +13,7 @@ function ChatBox() {
   const selectedChat = useSelector(
     (state) => state.chatDataReducer.selectedChat
   );
-  const fetchAgain = useSelector(
-    (state) => state.chatDataReducer.setFetchAgain
-  );
+  const fetchAgain = useSelector((state) => state.chatDataReducer.fetchAgain);
   const loggedUser = useSelector((state) => state.authDataReducer.loggedUser);
   const dispatch = useDispatch();
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -30,16 +28,17 @@ function ChatBox() {
     <div className="chatbox-container">
       {selectedChat ? (
         <div className="header" onClick={handleOpenModal}>
-          <div className="header-name">
+          <div className="header-name" onClick={handleOpenModal}>
             {selectedChat.isGroupChat ? (
               <>
-                <span onClick={handleOpenModal}>
-                  {selectedChat.chatName.toUpperCase()}
-                </span>
                 <UpdateGroupChatModal
                   isOpen={isModalOpen}
                   onClose={handleCloseModal}
-                />
+                >
+                  <span className="group-name" onClick={handleOpenModal}>
+                    {selectedChat.chatName.toUpperCase()}
+                  </span>
+                </UpdateGroupChatModal>
               </>
             ) : (
               <>

@@ -11,13 +11,10 @@ function MyChat() {
   const dispatch = useDispatch();
   const myChatData = useSelector((state) => state.chatDataReducer.myChatData);
   const loggedUser = useSelector((state) => state.authDataReducer.loggedUser);
-  const fetchAgain = useSelector(
-    (state) => state.chatDataReducer.setFetchAgain
-  );
-  // console.log("MyChat->", loggedUser);
+  const fetchAgain = useSelector((state) => state.chatDataReducer.fetchAgain);
 
   useEffect(() => {
-    console.log("myChat useEffect11");
+    console.log("lets check here");
     dispatch(getMyChat());
     dispatch(getLoggedUser());
   }, [dispatch, fetchAgain]);
