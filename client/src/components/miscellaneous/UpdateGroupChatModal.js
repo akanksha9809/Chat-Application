@@ -12,12 +12,14 @@ import {
   Box,
   FormControl,
   Input,
+  Spinner,
 } from "@chakra-ui/react";
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import UserBadgeItem from "./UserBadgeItem";
 import { axiosClient } from "../../utils/axiosClient";
 import { setFetchAgain, setSelectedChat } from "../../redux/slices/chatSlice";
+import UserListItem from "./UserListItem";
 
 function UpdateGroupChatModal({ onClose, children }) {
   const { isOpen, onOpen, onClose: handleCloseModal } = useDisclosure(); //renaming the onClose function to handleCloseModal
@@ -36,7 +38,6 @@ function UpdateGroupChatModal({ onClose, children }) {
   const [renameLoading, setRenameLoading] = useState(false);
   const toast = useToast();
 
-  console.log("check", fetchAgain);
   const handleRename = async () => {
     if (!groupChatName) return;
 
@@ -53,7 +54,6 @@ function UpdateGroupChatModal({ onClose, children }) {
       setRenameLoading(false);
       setGroupChatName("");
     } catch (error) {
-      console.log(error);
       toast({
         title: "Error Occured!",
         //description: error.response.data.result.message,
@@ -67,7 +67,70 @@ function UpdateGroupChatModal({ onClose, children }) {
     }
   };
   const handleRemove = () => {};
-  const handleSearch = () => {};
+  const handleAddUser = async (userToAdd) => {
+    if (selectedChat.users.find((user) => user._id === userToAdd._id)) {
+      toast({
+        title: "User Already Present in Group!",
+        status: "error",
+        duration: 5000,
+        isClosable: "true",
+        position: "bottom",
+        variant: "subtle",
+      });
+      return;
+    }
+    if (selectedChat.groupAdmin._id !== loggedUser._id) {
+      toast({
+        title: "Only Admin can add Users!",
+        status: "error",
+        duration: 5000,
+        isClosable: "true",
+        position: "bottom",
+        variant: "subtle",
+      });
+      return;
+    }
+
+    try {
+      setLoading(true);
+      const data = await axiosClient.put("/chat/addToGroup", {
+        chatId: selectedChat._id,
+        userId: userToAdd._id,
+      });
+      dispatch(setSelectedChat(data.result));
+      dispatch(setFetchAgain(!fetchAgain));
+      setLoading(false);
+    } catch (error) {
+      toast({
+        title: "Error Occured!",
+        status: "error",
+        duration: 5000,
+        isClosable: "true",
+        position: "bottom",
+        variant: "subtle",
+      });
+      setLoading(false);
+      return;
+    }
+  };
+  const handleSearch = async (query) => {
+    setSearchQuery(query);
+    if (!query) {
+      //empty
+      return;
+    }
+
+    try {
+      setLoading(true);
+
+      const data = await axiosClient.get(`/user?search=${query}`);
+      console.log(data.result);
+      setLoading(false);
+      setSearchResult(data.result);
+    } catch (e) {
+      console.log("failed to load the chats", e);
+    }
+  };
   return (
     <>
       <span onClick={onOpen}>{children}</span>
@@ -110,9 +173,24 @@ function UpdateGroupChatModal({ onClose, children }) {
                 onChange={(e) => handleSearch(e.target.value)}
               />
             </FormControl>
+            {loading ? (
+              <Spinner size="lg" />
+            ) : (
+              searchResult?.map((user) => (
+                <UserListItem
+                  key={user._id}
+                  user={user}
+                  handleFunction={() => handleAddUser(user)}
+                />
+              ))
+            )}
           </ModalBody>
           <ModalFooter>
-            <Button colorScheme="red" mr={3} onClick={() => handleRemove()}>
+            <Button
+              colorScheme="red"
+              mr={3}
+              onClick={() => handleRemove(loggedUser)}
+            >
               Exit Group
             </Button>
           </ModalFooter>
