@@ -48,7 +48,6 @@ function UpdateGroupChatModal({ onClose, children }) {
         chatName: groupChatName,
       });
 
-      console.log("fetchagain data", fetchAgain);
       dispatch(setSelectedChat(data.result)); //updated data will be set
       dispatch(setFetchAgain(!fetchAgain)); //fetching again to get updated data
       setRenameLoading(false);
@@ -66,7 +65,52 @@ function UpdateGroupChatModal({ onClose, children }) {
       setRenameLoading(false);
     }
   };
-  const handleRemove = () => {};
+  const handleRemove = async (userToRemove) => {
+    if (userToRemove._id === loggedUser._id) {
+      toast({
+        title: "Click on Exit Group!",
+        status: "info",
+        duration: 5000,
+        isClosable: "true",
+        position: "top",
+        variant: "subtle",
+      });
+      return;
+    }
+    if (selectedChat.groupAdmin._id !== loggedUser._id) {
+      toast({
+        title: "Only Admin can remove User!",
+        status: "error",
+        duration: 5000,
+        isClosable: "true",
+        position: "bottom",
+        variant: "subtle",
+      });
+      return;
+    }
+
+    try {
+      setLoading(true);
+      const data = await axiosClient.put("/chat/removeFromGroup", {
+        chatId: selectedChat._id,
+        userId: userToRemove._id,
+      });
+      dispatch(setSelectedChat(data.result));
+      dispatch(setFetchAgain(!fetchAgain));
+      setLoading(false);
+    } catch (error) {
+      toast({
+        title: "Error Occured!",
+        status: "error",
+        duration: 5000,
+        isClosable: "true",
+        position: "bottom",
+        variant: "subtle",
+      });
+      setLoading(false);
+      return;
+    }
+  };
   const handleAddUser = async (userToAdd) => {
     if (selectedChat.users.find((user) => user._id === userToAdd._id)) {
       toast({
