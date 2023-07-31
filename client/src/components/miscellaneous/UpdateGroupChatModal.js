@@ -111,6 +111,32 @@ function UpdateGroupChatModal({ onClose, children }) {
       return;
     }
   };
+  const handleExit = async (userToRemove) => {
+    try {
+      setLoading(true);
+      const data = await axiosClient.put("/chat/removeFromGroup", {
+        chatId: selectedChat._id,
+        userId: userToRemove._id,
+      });
+      dispatch(setSelectedChat());
+      //assign new group admin
+
+      dispatch(setFetchAgain(!fetchAgain));
+      setLoading(false);
+    } catch (error) {
+      toast({
+        title: "Error Occured!",
+        status: "error",
+        duration: 5000,
+        isClosable: "true",
+        position: "bottom",
+        variant: "subtle",
+      });
+      setLoading(false);
+      return;
+    }
+  };
+
   const handleAddUser = async (userToAdd) => {
     if (selectedChat.users.find((user) => user._id === userToAdd._id)) {
       toast({
@@ -233,7 +259,7 @@ function UpdateGroupChatModal({ onClose, children }) {
             <Button
               colorScheme="red"
               mr={3}
-              onClick={() => handleRemove(loggedUser)}
+              onClick={() => handleExit(loggedUser)}
             >
               Exit Group
             </Button>
