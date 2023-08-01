@@ -1,17 +1,48 @@
 .chatbox-container {
   width: 100%;
+  height: 100%;
+
   background-color: var(--dark-grey);
-  .header {
-    height: 72px;
-    color: white;
-    display: flex;
-    align-items: center;
-    justify-content: flex-start;
-    margin-left: 10px;
-    cursor: pointer;
-    .group-name {
-      height: 100%;
-      width: 100%;
+  .chatbox {
+    display: grid;
+    height: 100%;
+    grid-template-rows: 3fr 5fr 2fr;
+    .header {
+      /*/height: 72px;*/
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      padding-left: 10px;
+      cursor: pointer;
+      .group-name {
+        height: 100%;
+        width: 100%;
+      }
+    }
+
+    .chat-section {
+      height: 570px;
+      background-image: url("../../assets/pxfuel.jpg");
+      background-size: contain;
+      background-position: center;
+      display: flex;
+
+      flex-direction: column;
+      overflow-y: scroll;
+      scrollbar-width: none;
+
+      /* .messages {
+        display: flex;
+        flex-direction: column;
+        overflow-y: scroll;
+        scrollbar-width: none;
+      } */
+    }
+
+    .input-section {
+      background-color: var(--dark-grey);
+      padding: 2px;
     }
   }
 }

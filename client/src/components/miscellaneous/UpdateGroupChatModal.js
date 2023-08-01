@@ -21,7 +21,7 @@ import { axiosClient } from "../../utils/axiosClient";
 import { setFetchAgain, setSelectedChat } from "../../redux/slices/chatSlice";
 import UserListItem from "./UserListItem";
 
-function UpdateGroupChatModal({ onClose, children }) {
+function UpdateGroupChatModal({ onClose, children, fetchMessages }) {
   const { isOpen, onOpen, onClose: handleCloseModal } = useDisclosure(); //renaming the onClose function to handleCloseModal
   const fetchAgain = useSelector((state) => state.chatDataReducer.fetchAgain);
   const selectedChat = useSelector(
@@ -97,6 +97,7 @@ function UpdateGroupChatModal({ onClose, children }) {
       });
       dispatch(setSelectedChat(data.result));
       dispatch(setFetchAgain(!fetchAgain));
+      fetchMessages(); //messages get refreshed
       setLoading(false);
     } catch (error) {
       toast({
@@ -122,6 +123,7 @@ function UpdateGroupChatModal({ onClose, children }) {
       //assign new group admin
 
       dispatch(setFetchAgain(!fetchAgain));
+      fetchMessages();
       setLoading(false);
     } catch (error) {
       toast({

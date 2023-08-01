@@ -5,8 +5,7 @@ import { useSelector } from "react-redux";
 import ChatBox from "../chatBox/ChatBox";
 
 function SingleChat() {
-  const [messages, setMessages] = useState([]);
-  const [newMessage, setNewMessages] = useState();
+  
   const selectedChat = useSelector(
     (state) => state.chatDataReducer.selectedChat
   );

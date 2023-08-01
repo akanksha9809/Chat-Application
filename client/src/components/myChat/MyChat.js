@@ -14,7 +14,6 @@ function MyChat() {
   const fetchAgain = useSelector((state) => state.chatDataReducer.fetchAgain);
 
   useEffect(() => {
-    console.log("lets check here");
     dispatch(getMyChat());
     dispatch(getLoggedUser());
   }, [dispatch, fetchAgain]);
