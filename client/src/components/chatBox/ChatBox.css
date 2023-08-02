@@ -27,6 +27,7 @@
       background-size: contain;
       background-position: center;
       display: flex;
+      padding-inline: 5px;
 
       flex-direction: column;
       overflow-y: scroll;
