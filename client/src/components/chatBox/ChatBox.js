@@ -9,22 +9,60 @@ import {
 } from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { setSelectedChat } from "../../redux/slices/chatSlice";
+import { setFetchAgain, setSelectedChat } from "../../redux/slices/chatSlice";
 import { getSender } from "../../config/ChatLogic";
 import { getLoggedUser } from "../../redux/slices/authSlice";
-import "./ChatBox.css";
+import "./ChatBox.scss";
 import UpdateGroupChatModal from "../miscellaneous/UpdateGroupChatModal";
 import { axiosClient } from "../../utils/axiosClient";
 import ScrollableChat from "../scrollableChat/ScrollableChat";
+import io from "socket.io-client";
+
+const ENDPOINT = "http://localhost:4000";
+var socket, selectedChatCompare;
 
 function ChatBox() {
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessages] = useState("");
   const [loading, setLoading] = useState(false);
+  const [socketConnected, setSocketConnected] = useState(false);
+  const [typing, setTyping] = useState(false);
+  const [isTyping, setIsTyping] = useState(false);
 
+  const fetchAgain = useSelector((state) => state.chatDataReducer.fetchAgain);
+  const loggedUser = useSelector((state) => state.authDataReducer.loggedUser);
+  const dispatch = useDispatch();
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const toast = useToast();
   const selectedChat = useSelector(
     (state) => state.chatDataReducer.selectedChat
   );
+
+  useEffect(() => {
+    socket = io(ENDPOINT);
+    socket.emit("setup", loggedUser);
+    socket.on("connected", () => setSocketConnected(true));
+    socket.on("typing", () => setIsTyping(true));
+    socket.on("stop typing", () => setIsTyping(false));
+  });
+
+  useEffect(() => {
+    fetchMessages();
+    selectedChatCompare = selectedChat;
+  }, [selectedChat]);
+
+  useEffect(() => {
+    socket.on("message recieved", (newMessageRecieved) => {
+      if (
+        !selectedChatCompare ||
+        selectedChatCompare._id !== newMessageRecieved.chat._id
+      ) {
+        //give notification
+      } else {
+        setMessages([...messages, newMessageRecieved]);
+      }
+    });
+  });
 
   //fetching all messages
   const fetchMessages = async () => {
@@ -35,8 +73,7 @@ function ChatBox() {
       const data = await axiosClient.get(`/message/${selectedChat._id}`);
       setMessages(data.result);
       setLoading(false);
-
-      console.log("cheking NOW!!! ", data.result);
+      socket.emit("join chat", selectedChat?._id);
     } catch (error) {
       toast({
         title: "Error Occured!!",
@@ -50,16 +87,6 @@ function ChatBox() {
     }
     setLoading(false);
   };
-
-  useEffect(() => {
-    fetchMessages();
-  }, [selectedChat]);
-
-  const fetchAgain = useSelector((state) => state.chatDataReducer.fetchAgain);
-  const loggedUser = useSelector((state) => state.authDataReducer.loggedUser);
-  const dispatch = useDispatch();
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const toast = useToast();
 
   const handleOpenModal = (event) => {
     setIsModalOpen(true);
@@ -77,7 +104,9 @@ function ChatBox() {
           content: newMessage,
         });
 
+        socket.emit("new message", data.result);
         setMessages([...messages, data.result]);
+        dispatch(setFetchAgain(!fetchAgain));
       } catch (error) {
         toast({
           title: "Error Occured!!",
@@ -93,7 +122,26 @@ function ChatBox() {
   };
   const typingHandler = (event) => {
     setNewMessages(event.target.value);
+
     //typing indicator logic
+    if (!socketConnected) return;
+
+    if (!typing) {
+      setTyping(true);
+      socket.emit("typing", selectedChat._id);
+    }
+
+    let lastTypingTime = new Date().getTime();
+    var timerLength = 3000;
+    setTimeout(() => {
+      var timeNow = new Date().getTime();
+      var timeDiff = timeNow - lastTypingTime;
+
+      if (timeDiff >= timerLength && typing) {
+        socket.emit("stop typing", selectedChat._id);
+        setTyping(false);
+      }
+    }, timerLength);
   };
 
   return (
@@ -135,7 +183,9 @@ function ChatBox() {
           </div>
           <div className="input-section">
             <FormControl onKeyDown={sendMessage} isRequired>
+              {/* {isTyping && <div>loading...</div>} */}
               <Input
+                className="input-text"
                 variant="filled"
                 placeholder="Type a message"
                 onChange={typingHandler}

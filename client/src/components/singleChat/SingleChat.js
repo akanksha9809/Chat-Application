@@ -5,23 +5,20 @@ import { useSelector } from "react-redux";
 import ChatBox from "../chatBox/ChatBox";
 
 function SingleChat() {
-  
   const selectedChat = useSelector(
     (state) => state.chatDataReducer.selectedChat
   );
-  const fetchAgain = useSelector(
-    (state) => state.chatDataReducer.fetchAgain
-  );
+  const fetchAgain = useSelector((state) => state.chatDataReducer.fetchAgain);
   const loggedUser = useSelector((state) => state.authDataReducer.loggedUser);
 
   return (
     <Box
-      display={{ base: selectedChat ? "none" : "flex", md: "flex" }}
+      display="flex"
       flexDir="column"
       alignItems="center"
       // p={3}
       bg="grey.600"
-      width={{ base: "100%", md: "100%" }}
+      width="100%"
       borderRadius="lg"
       borderWidth="1px"
       className="singlechat"

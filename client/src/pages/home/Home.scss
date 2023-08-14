@@ -1,7 +1,25 @@
 .home-container {
-  width: 100%;
-  .home {
-    display: grid;
-    grid-template-columns: 0.5fr 3.5fr 6fr;
+  grid-template-columns: 4fr 6fr;
+
+  .mychat-section {
+    @media only screen and (max-width: 740px) {
+      &.chat-selected {
+        display: none;
+      }
+    }
+  }
+  .singleChat-section {
+    height: 100%;
+    overflow: hidden;
+    @media only screen and (max-width: 740px) {
+      display: none;
+      &.chat-selected {
+        display: block;
+      }
+    }
+  }
+
+  @media only screen and (max-width: 740px) {
+    grid-template-columns: 1fr;
   }
 }

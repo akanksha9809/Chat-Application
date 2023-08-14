@@ -16,6 +16,7 @@ function MyChat() {
   useEffect(() => {
     dispatch(getMyChat());
     dispatch(getLoggedUser());
+    console.log("in mychat useEffect");
   }, [dispatch, fetchAgain]);
 
   return (

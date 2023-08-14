@@ -6,7 +6,7 @@
   .chatbox {
     display: grid;
     height: 100%;
-    grid-template-rows: 3fr 5fr 2fr;
+    grid-template-rows: 1fr 8fr 1fr;
     .header {
       /*/height: 72px;*/
       color: white;
@@ -22,7 +22,6 @@
     }
 
     .chat-section {
-      height: 570px;
       background-image: url("../../assets/pxfuel.jpg");
       background-size: contain;
       background-position: center;
@@ -44,6 +43,15 @@
     .input-section {
       background-color: var(--dark-grey);
       padding: 2px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+      .input-text {
+        background-color: var(--dark-grey);
+        outline: none;
+        border: 1px solid white;
+      }
     }
   }
 }

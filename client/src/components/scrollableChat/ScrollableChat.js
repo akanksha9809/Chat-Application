@@ -11,10 +11,14 @@ import { useSelector } from "react-redux";
 import { Avatar, Tooltip } from "@chakra-ui/react";
 
 function ScrollableChat({ messages }) {
+  const color1 =
+    "radial-gradient(circle farthest-corner at 10% 20%, rgba(97, 186, 255, 1) 0%, rgba(166, 239, 253, 1) 90.1%)";
+  const color2 =
+    "radial-gradient( circle 935px at 3.1% 5.8%,  rgba(182,255,139,1) 0%, rgba(8,88,127,1) 100.2% )";
+  //"radial-gradient( circle 935px at 3.1% 5.8%,  rgba(182,255,139,1) 0%, rgba(8,88,127,1) 100.2% )";
   const loggedUser = useSelector((state) => state.authDataReducer.loggedUser);
   return (
     <ScrollableFeed>
-      {console.log("msg len", messages.length)}
       {messages &&
         messages.map((msg, ind) => (
           <div style={{ display: "flex" }} key={msg._id}>
@@ -37,8 +41,8 @@ function ScrollableChat({ messages }) {
             )}
             <span
               style={{
-                backgroundColor: `${
-                  msg.sender._id === loggedUser._id ? "#BEE3F8" : "#B9F5D0"
+                background: `${
+                  msg.sender._id === loggedUser._id ? color2 : color1
                 }`,
                 borderRadius: "8px",
                 padding: "5px 15px",
