@@ -17,6 +17,8 @@ import UpdateGroupChatModal from "../miscellaneous/UpdateGroupChatModal";
 import { axiosClient } from "../../utils/axiosClient";
 import ScrollableChat from "../scrollableChat/ScrollableChat";
 import io from "socket.io-client";
+import { BsArrowLeft } from "react-icons/bs";
+import Avatar from "../avatar/Avatar";
 
 const ENDPOINT = "http://localhost:4000";
 var socket, selectedChatCompare;
@@ -37,6 +39,8 @@ function ChatBox() {
   const selectedChat = useSelector(
     (state) => state.chatDataReducer.selectedChat
   );
+  const [emojiPickerVisible, setEmojiPickerVisible] = useState(false);
+  const [selectedEmoji, setSelectedEmoji] = useState("");
 
   useEffect(() => {
     socket = io(ENDPOINT);
@@ -149,6 +153,15 @@ function ChatBox() {
       {selectedChat ? (
         <div className="chatbox">
           <div className="header" onClick={handleOpenModal}>
+            <div
+              className="arrowIcon"
+              onClick={() => dispatch(setSelectedChat(null))}
+            >
+              <BsArrowLeft />
+            </div>
+            <div className="header-pic">
+              <Avatar />
+            </div>
             {selectedChat.isGroupChat ? (
               <>
                 <UpdateGroupChatModal
@@ -177,20 +190,28 @@ function ChatBox() {
               />
             ) : (
               <div className="messages">
-                <ScrollableChat messages={messages} />
+                <ScrollableChat
+                  messages={messages}
+                  isGroupChat={selectedChat.isGroupChat}
+                />
               </div>
             )}
           </div>
           <div className="input-section">
-            <FormControl onKeyDown={sendMessage} isRequired>
+            <FormControl
+              onKeyDown={sendMessage}
+              isRequired
+              display="flex"
+              justifyContent="center"
+            >
               {/* {isTyping && <div>loading...</div>} */}
-              <Input
+
+              <input
+                type="text"
                 className="input-text"
-                variant="filled"
                 placeholder="Type a message"
-                onChange={typingHandler}
                 value={newMessage}
-                color="white"
+                onChange={typingHandler}
               />
             </FormControl>
           </div>

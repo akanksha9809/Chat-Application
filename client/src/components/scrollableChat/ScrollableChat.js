@@ -10,7 +10,7 @@ import {
 import { useSelector } from "react-redux";
 import { Avatar, Tooltip } from "@chakra-ui/react";
 
-function ScrollableChat({ messages }) {
+function ScrollableChat({ messages, isGroupChat }) {
   const color1 =
     "radial-gradient(circle farthest-corner at 10% 20%, rgba(97, 186, 255, 1) 0%, rgba(166, 239, 253, 1) 90.1%)";
   const color2 =
@@ -22,23 +22,24 @@ function ScrollableChat({ messages }) {
       {messages &&
         messages.map((msg, ind) => (
           <div style={{ display: "flex" }} key={msg._id}>
-            {(isSameSender(messages, msg, ind, loggedUser) ||
-              isLastMessage(messages, ind, loggedUser._id)) && (
-              <Tooltip
-                label={msg.sender.name}
-                placement="bottom-start"
-                hasArrow
-              >
-                <Avatar
-                  marginTop="7px"
-                  marginRight={1}
-                  size="sm"
-                  cursor="pointer"
-                  name={msg.sender.name}
-                  scrollMargin={msg.sender.pic}
-                ></Avatar>
-              </Tooltip>
-            )}
+            {isGroupChat &&
+              (isSameSender(messages, msg, ind, loggedUser) ||
+                isLastMessage(messages, ind, loggedUser._id)) && (
+                <Tooltip
+                  label={msg.sender.name}
+                  placement="bottom-start"
+                  hasArrow
+                >
+                  <Avatar
+                    marginTop="7px"
+                    marginRight={1}
+                    size="sm"
+                    cursor="pointer"
+                    name={msg.sender.name}
+                    scrollMargin={msg.sender.pic}
+                  ></Avatar>
+                </Tooltip>
+              )}
             <span
               style={{
                 background: `${
