@@ -194,6 +194,7 @@ function ChatBox() {
                   messages={messages}
                   isGroupChat={selectedChat.isGroupChat}
                 />
+                {isTyping && <div>loading...</div>}
               </div>
             )}
           </div>
@@ -204,8 +205,6 @@ function ChatBox() {
               display="flex"
               justifyContent="center"
             >
-              {/* {isTyping && <div>loading...</div>} */}
-
               <input
                 type="text"
                 className="input-text"

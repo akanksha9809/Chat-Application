@@ -5,9 +5,13 @@ import { getSender } from "../../config/ChatLogic";
 import { Text } from "@chakra-ui/layout";
 
 function ChatListItem({ chatItem, loggedUser, onClick }) {
-  const name = !chatItem.isGroupChat
-    ? getSender(loggedUser, chatItem.users)
-    : chatItem.chatName;
+  console.log("ChatListItem", chatItem);
+
+  const name = chatItem.users
+    ? !chatItem.isGroupChat
+      ? getSender(loggedUser, chatItem.users)
+      : chatItem.chatName
+    : chatItem.name;
   return (
     <div className="chatListItem-container" onClick={onClick}>
       <div className="profile-img">

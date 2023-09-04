@@ -40,15 +40,19 @@
       padding-inline: 5px;
 
       flex-direction: column;
-      overflow-y: scroll;
-      scrollbar-width: none;
+      overflow-y: hidden;
 
-      /* .messages {
+      .messages {
         display: flex;
         flex-direction: column;
         overflow-y: scroll;
         scrollbar-width: none;
-      } */
+        -ms-overflow-style: none;
+
+        &::-webkit-scrollbar {
+          display: none;
+        }
+      }
     }
 
     .input-section {
