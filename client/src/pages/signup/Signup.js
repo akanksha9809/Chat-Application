@@ -3,12 +3,26 @@ import "./Signup.scss";
 import { Link } from "react-router-dom";
 import { axiosClient } from "../../utils/axiosClient";
 import defaultImg from "../../assets/user.png";
+import { useToast } from "@chakra-ui/react";
 
 function Signup() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [userImg, setUserImg] = useState("");
+  const toast = useToast();
+
+  function handleImageChange(e) {
+    const file = e.target.files[0];
+    const fileReader = new FileReader();
+    fileReader.readAsDataURL(file);
+    fileReader.onload = () => {
+      if (fileReader.readyState === fileReader.DONE) {
+        setUserImg(fileReader.result);
+        // console.log("img data", fileReader.result);
+      }
+    };
+  }
 
   async function handleSubmit(e) {
     try {
@@ -17,14 +31,23 @@ function Signup() {
         name,
         email,
         password,
+        userImg,
       });
-      console.log(result);
+      toast({
+        title: result.result,
+        status: "succes",
+        duration: 5000,
+        isClosable: "true",
+        position: "top",
+        variant: "subtle",
+      });
+      if(result.status==="ok"){
+        
+      }
     } catch (error) {
       console.log(error);
     }
   }
-
-  
 
   return (
     <div className="signup">
