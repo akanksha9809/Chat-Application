@@ -2,10 +2,11 @@ const User = require("../models/User");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const { error, success } = require("../utils/responseWrapper");
+const cloudinary = require("cloudinary").v2;
 
 const signupController = async (req, res) => {
   try {
-    const { name, email, password } = req.body; //because of middleware (body parser)
+    const { name, email, password, userImg } = req.body; //because of middleware (body parser)
 
     if (!name || !email || !password) {
       return res.send(error(400, "All fields are required!"));
@@ -20,10 +21,19 @@ const signupController = async (req, res) => {
 
     const hashedPassword = await bcrypt.hash(password, 10);
 
+    var uploadImg;
+    if (userImg) {
+      const cloudImg = await cloudinary.uploader.upload(userImg, {
+        folder: "chatAppProfilePic",
+      });
+      uploadImg = cloudImg.secure_url;
+    }
+
     const user = await User.create({
       name,
       email,
       password: hashedPassword,
+      pic: uploadImg,
     });
 
     const newUser = await User.findById(user._id);

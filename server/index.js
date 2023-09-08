@@ -5,12 +5,20 @@ const authRouter = require("./routers/authRouter");
 const userRouter = require("./routers/userRouter");
 const chatRouter = require("./routers/chatRouter");
 const messageRouter = require("./routers/messageRouter");
+const cloudinary = require("cloudinary").v2;
 
 const morgan = require("morgan");
 const cookieParser = require("cookie-parser");
 const cors = require("cors");
 
 dotenv.config("./env");
+
+// Configuration
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET,
+});
 
 const app = express();
 
@@ -64,8 +72,8 @@ io.on("connection", (socket) => {
     );
   });
 
-  socket.on("typing", (room) => socket.in(room).emit("typing"));
-  socket.on("stop typing", (room) => socket.in(room).emit("stop typing"));
+  socket.on("typing", (room) => socket.in(room).emit("user typing"));
+  socket.on("stop typing", (room) => socket.in(room).emit("user stop typing"));
 
   socket.on("new message", (newMessageRecieved) => {
     var chat = newMessageRecieved.chat;

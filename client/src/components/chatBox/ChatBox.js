@@ -46,9 +46,14 @@ function ChatBox() {
     socket = io(ENDPOINT);
     socket.emit("setup", loggedUser);
     socket.on("connected", () => setSocketConnected(true));
-    socket.on("typing", () => setIsTyping(true));
-    socket.on("stop typing", () => setIsTyping(false));
+    socket.on("user typing", () => setIsTyping(true));
+    socket.on("user stop typing", () => setIsTyping(false));
   });
+
+  useEffect(() => {
+    socket.off("user typing");
+    socket.off("user stop typing");
+  }, [selectedChat]);
 
   useEffect(() => {
     fetchMessages();
@@ -101,6 +106,7 @@ function ChatBox() {
 
   const sendMessage = async (event) => {
     if (event.key == "Enter" && newMessage) {
+      socket.emit("user stop typing", selectedChat._id);
       setNewMessages(""); //it will not make it empty immediately, due to async
       try {
         const data = await axiosClient.post("/message/", {
@@ -128,24 +134,17 @@ function ChatBox() {
     setNewMessages(event.target.value);
 
     //typing indicator logic
-    if (!socketConnected) return;
-
-    if (!typing) {
+    if (socketConnected && !typing) {
       setTyping(true);
-      socket.emit("typing", selectedChat._id);
+      socket.emit("typing", selectedChat?._id);
     }
 
-    let lastTypingTime = new Date().getTime();
-    var timerLength = 3000;
     setTimeout(() => {
-      var timeNow = new Date().getTime();
-      var timeDiff = timeNow - lastTypingTime;
-
-      if (timeDiff >= timerLength && typing) {
-        socket.emit("stop typing", selectedChat._id);
+      if (typing) {
+        socket.emit("stop typing", selectedChat?._id);
         setTyping(false);
       }
-    }, timerLength);
+    }, 2000);
   };
 
   return (
@@ -193,8 +192,8 @@ function ChatBox() {
                 <ScrollableChat
                   messages={messages}
                   isGroupChat={selectedChat.isGroupChat}
+                  isTyping={isTyping}
                 />
-                {isTyping && <div>loading...</div>}
               </div>
             )}
           </div>

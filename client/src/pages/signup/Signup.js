@@ -2,10 +2,13 @@ import React, { useState } from "react";
 import "./Signup.scss";
 import { Link } from "react-router-dom";
 import { axiosClient } from "../../utils/axiosClient";
+import defaultImg from "../../assets/user.png";
+
 function Signup() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [userImg, setUserImg] = useState("");
 
   async function handleSubmit(e) {
     try {
@@ -20,13 +23,27 @@ function Signup() {
       console.log(error);
     }
   }
+
+  
+
   return (
     <div className="signup">
       <div className="signup-box">
         <span className="border-line"></span>
         <form onSubmit={handleSubmit}>
           <h2 className="heading">Sign Up</h2>
-
+          <div className="input-user-img">
+            <label htmlFor="inputImg" className="labelImg">
+              <img src={userImg ? userImg : defaultImg} alt={name} />
+            </label>
+            <input
+              className="inputImg"
+              id="inputImg"
+              type="file"
+              accept="image/*"
+              onChange={handleImageChange}
+            />
+          </div>
           <div className="inputBox">
             <input
               type="text"

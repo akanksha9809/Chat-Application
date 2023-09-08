@@ -10,7 +10,7 @@ import {
 import { useSelector } from "react-redux";
 import { Avatar, Tooltip } from "@chakra-ui/react";
 
-function ScrollableChat({ messages, isGroupChat }) {
+function ScrollableChat({ messages, isGroupChat, isTyping }) {
   const color1 =
     "radial-gradient(circle farthest-corner at 10% 20%, rgba(97, 186, 255, 1) 0%, rgba(166, 239, 253, 1) 90.1%)";
   const color2 =
@@ -45,7 +45,7 @@ function ScrollableChat({ messages, isGroupChat }) {
                 background: `${
                   msg.sender._id === loggedUser._id ? color2 : color1
                 }`,
-                borderRadius: "8px",
+                borderRadius: "15px",
                 padding: "5px 15px",
                 marginLeft: isSameSenderMargin(
                   messages,
@@ -62,6 +62,7 @@ function ScrollableChat({ messages, isGroupChat }) {
             </span>
           </div>
         ))}
+      {isTyping && <div>typing...</div>}
     </ScrollableFeed>
   );
 }
