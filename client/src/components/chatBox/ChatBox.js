@@ -25,7 +25,7 @@ var socket, selectedChatCompare;
 
 function ChatBox() {
   const [messages, setMessages] = useState([]);
-  const [newMessage, setNewMessages] = useState("");
+  const [newMessage, setNewMessage] = useState("");
   const [loading, setLoading] = useState(false);
   const [socketConnected, setSocketConnected] = useState(false);
   const [typing, setTyping] = useState(false);
@@ -46,14 +46,9 @@ function ChatBox() {
     socket = io(ENDPOINT);
     socket.emit("setup", loggedUser);
     socket.on("connected", () => setSocketConnected(true));
-    socket.on("user typing", () => setIsTyping(true));
-    socket.on("user stop typing", () => setIsTyping(false));
-  });
-
-  useEffect(() => {
-    socket.off("user typing");
-    socket.off("user stop typing");
-  }, [selectedChat]);
+    socket.on("typing", () => setIsTyping(true));
+    socket.on("stop typing", () => setIsTyping(false));
+  }, []);
 
   useEffect(() => {
     fetchMessages();
@@ -79,7 +74,7 @@ function ChatBox() {
 
     try {
       setLoading(true);
-      const data = await axiosClient.get(`/message/${selectedChat._id}`);
+      const data = await axiosClient.get(`/message/${selectedChat?._id}`);
       setMessages(data.result);
       setLoading(false);
       socket.emit("join chat", selectedChat?._id);
@@ -106,11 +101,11 @@ function ChatBox() {
 
   const sendMessage = async (event) => {
     if (event.key == "Enter" && newMessage) {
-      socket.emit("user stop typing", selectedChat._id);
-      setNewMessages(""); //it will not make it empty immediately, due to async
+      socket.emit("stop typing", selectedChat?._id);
+      setNewMessage(""); //it will not make it empty immediately, due to async
       try {
         const data = await axiosClient.post("/message/", {
-          chatId: selectedChat._id,
+          chatId: selectedChat?._id,
           content: newMessage,
         });
 
@@ -130,21 +125,25 @@ function ChatBox() {
       }
     }
   };
-  const typingHandler = (event) => {
-    setNewMessages(event.target.value);
+  const typingHandler = (e) => {
+    setNewMessage(e.target.value);
 
-    //typing indicator logic
-    if (socketConnected && !typing) {
+    if (!socketConnected) return;
+
+    if (!typing) {
       setTyping(true);
       socket.emit("typing", selectedChat?._id);
     }
-
+    let lastTypingTime = new Date().getTime();
+    var timerLength = 3000;
     setTimeout(() => {
-      if (typing) {
+      var timeNow = new Date().getTime();
+      var timeDiff = timeNow - lastTypingTime;
+      if (timeDiff >= timerLength && typing) {
         socket.emit("stop typing", selectedChat?._id);
         setTyping(false);
       }
-    }, 2000);
+    }, timerLength);
   };
 
   return (
@@ -204,6 +203,7 @@ function ChatBox() {
               display="flex"
               justifyContent="center"
             >
+              
               <input
                 type="text"
                 className="input-text"

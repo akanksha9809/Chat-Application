@@ -1,11 +1,11 @@
 import React from 'react'
-
+import defaultImg from "../../assets/user.png";
 import './Avatar.scss'
 
-function Avatar() {
+function Avatar({src}) {
   return (
     <div className='Avatar'>
-        <img src="https://icon-library.com/images/anonymous-avatar-icon/anonymous-avatar-icon-25.jpg" alt="User Avatar" />
+         <img src={src ? src : defaultImg} alt="User Avatar" />
     </div>
   )
 }

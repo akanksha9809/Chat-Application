@@ -62,7 +62,7 @@ function ScrollableChat({ messages, isGroupChat, isTyping }) {
             </span>
           </div>
         ))}
-      {isTyping && <div>typing...</div>}
+      {isTyping && <div color="white">typing...</div>}
     </ScrollableFeed>
   );
 }

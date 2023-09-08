@@ -15,11 +15,11 @@ function ChatListItem({ chatItem, loggedUser, onClick }) {
   return (
     <div className="chatListItem-container" onClick={onClick}>
       <div className="profile-img">
-        <Avatar />
+        <Avatar src={""} />
       </div>
       <div className="user-info">
         <div className="name">{name}</div>
-        <div className="last-msg"></div>
+        <div className={chatItem?.latestMessage}></div>
         <Text color={"gray.500"}>message</Text>
       </div>
     </div>
