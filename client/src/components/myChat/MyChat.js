@@ -7,6 +7,7 @@ import { getMyChat, setSelectedChat } from "../../redux/slices/chatSlice";
 import { getLoggedUser } from "../../redux/slices/authSlice";
 import GroupChatModal from "../miscellaneous/GroupChatModal";
 import { axiosClient } from "../../utils/axiosClient";
+import Avatar from "../avatar/Avatar";
 
 function MyChat() {
   const dispatch = useDispatch();
@@ -32,7 +33,6 @@ function MyChat() {
       const data = await axiosClient.get(`/user?search=${query}`);
       console.log("from main search", data.result);
       setLoading(false);
-      setSearchText("");
       setSearchResult(data.result);
     } catch (e) {
       console.log("failed to load the chats", e);
@@ -50,6 +50,7 @@ function MyChat() {
       });
       console.log(data.result);
       dispatch(setSelectedChat(data.result));
+      setSearchText("");
     } catch (error) {
       console.log("failed to load the chats", error);
     }
@@ -64,7 +65,13 @@ function MyChat() {
   return (
     <div className="mychat">
       <div className="mychat-box">
-        <Search onChange={handleSearch} />
+        <div className="navBar">
+          <div className="myProfile">
+            <Avatar src={loggedUser?.pic} />
+          </div>
+          <Search onChange={handleSearch} />
+        </div>
+
         {loading ? (
           <div>Loading</div>
         ) : searchResult.length > 0 ? (
@@ -79,7 +86,6 @@ function MyChat() {
             ))}
           </div>
         ) : (
-          // {setSearchResult([]);}
           <>
             <div className="mid-section">
               <h3>My chats</h3>

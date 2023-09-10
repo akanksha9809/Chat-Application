@@ -1,5 +1,7 @@
 .home-container {
   grid-template-columns: 4fr 6fr;
+  overflow: hidden;
+  height: 100%;
 
   .mychat-section {
     @media only screen and (max-width: 740px) {

@@ -5,8 +5,17 @@
   .mychat-box {
     display: flex;
     flex-direction: column;
-
     width: 100%;
+    overflow: hidden;
+    height: 100%;
+
+    .navBar {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+    }
 
     .mid-section {
       display: flex;
@@ -90,6 +99,11 @@
           background-position: 0 0;
         }
       }
+    }
+
+    .list {
+      height: 100%;
+      overflow-y: scroll;
     }
   }
 }

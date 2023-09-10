@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import "./Signup.scss";
-import { Link } from "react-router-dom";
+import { Link, Navigate, useNavigate } from "react-router-dom";
 import { axiosClient } from "../../utils/axiosClient";
 import defaultImg from "../../assets/user.png";
 import { useToast } from "@chakra-ui/react";
@@ -11,6 +11,7 @@ function Signup() {
   const [password, setPassword] = useState("");
   const [userImg, setUserImg] = useState("");
   const toast = useToast();
+  const navigate = useNavigate();
 
   function handleImageChange(e) {
     const file = e.target.files[0];
@@ -35,17 +36,23 @@ function Signup() {
       });
       toast({
         title: result.result,
-        status: "succes",
+        status: "success",
         duration: 5000,
         isClosable: "true",
         position: "top",
         variant: "subtle",
       });
-      if(result.status==="ok"){
-        
-      }
+      navigate("/login");
     } catch (error) {
       console.log(error);
+      toast({
+        title: error,
+        status: "error",
+        duration: 5000,
+        isClosable: "true",
+        position: "top",
+        variant: "subtle",
+      });
     }
   }
 

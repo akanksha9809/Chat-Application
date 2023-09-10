@@ -10,7 +10,7 @@ import {
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { setFetchAgain, setSelectedChat } from "../../redux/slices/chatSlice";
-import { getSender } from "../../config/ChatLogic";
+import { getSender, getSenderFull } from "../../config/ChatLogic";
 import { getLoggedUser } from "../../redux/slices/authSlice";
 import "./ChatBox.scss";
 import UpdateGroupChatModal from "../miscellaneous/UpdateGroupChatModal";
@@ -19,6 +19,7 @@ import ScrollableChat from "../scrollableChat/ScrollableChat";
 import io from "socket.io-client";
 import { BsArrowLeft } from "react-icons/bs";
 import Avatar from "../avatar/Avatar";
+import { IoMdSend } from "react-icons/io";
 
 const ENDPOINT = "http://localhost:4000";
 var socket, selectedChatCompare;
@@ -158,7 +159,13 @@ function ChatBox() {
               <BsArrowLeft />
             </div>
             <div className="header-pic">
-              <Avatar />
+              <Avatar
+                src={
+                  selectedChat.isGroupChat
+                    ? selectedChat.groupIcon
+                    : getSenderFull(loggedUser, selectedChat.users).pic
+                }
+              />
             </div>
             {selectedChat.isGroupChat ? (
               <>
@@ -202,8 +209,8 @@ function ChatBox() {
               isRequired
               display="flex"
               justifyContent="center"
+              gap={30}
             >
-              
               <input
                 type="text"
                 className="input-text"
@@ -211,6 +218,9 @@ function ChatBox() {
                 value={newMessage}
                 onChange={typingHandler}
               />
+              <div className="icon">
+                <IoMdSend size={27} />
+              </div>
             </FormControl>
           </div>
         </div>

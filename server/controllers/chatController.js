@@ -1,6 +1,7 @@
 const Chat = require("../models/Chat");
 const User = require("../models/User");
 const { error, success } = require("../utils/responseWrapper");
+const cloudinary = require("cloudinary").v2;
 
 //1:1 chat
 const accessChat = async (req, res) => {
@@ -69,7 +70,7 @@ const fetchChats = async (req, res) => {
 
 //group chat
 const createGroupChat = async (req, res) => {
-  const { name, users } = req.body;
+  const { name, users, groupIcon } = req.body;
   if (!name || !users) {
     return res.send(error(400, "UserId param not sent with request"));
   }
@@ -84,12 +85,21 @@ const createGroupChat = async (req, res) => {
 
   addUsers.push(req._id);
 
+  var uploadImg;
+  if (groupIcon) {
+    const cloudImg = await cloudinary.uploader.upload(groupIcon, {
+      folder: "chatAppProfilePic",
+    });
+    uploadImg = cloudImg.secure_url;
+  }
+
   try {
     const groupChat = await Chat.create({
       chatName: name,
       users: addUsers,
       isGroupChat: true,
       groupAdmin: req._id,
+      groupIcon: uploadImg,
     });
 
     const fullGroupChat = await Chat.findOne({ _id: groupChat._id })
