@@ -47,9 +47,9 @@ const signupController = async (req, res) => {
 
 const loginController = async (req, res) => {
   try {
-    const { name, email, password } = req.body; //because of middleware (body parser)
+    const { email, password } = req.body; //because of middleware (body parser)
 
-    if (!name || !email || !password) {
+    if (!email || !password) {
       return res.send(error(400, "All fields are required!"));
     }
 

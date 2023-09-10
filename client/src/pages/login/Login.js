@@ -4,12 +4,14 @@ import { Link, useNavigate } from "react-router-dom";
 import { axiosClient } from "../../utils/axiosClient";
 import { KEY_ACCESS_TOKEN, setItem } from "../../utils/localStorageManager";
 import { useDispatch } from "react-redux";
+import { useToast } from "@chakra-ui/react";
 
 function Login() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
+  const toast = useToast();
 
   async function handleSubmit(e) {
     try {
@@ -26,6 +28,15 @@ function Login() {
       console.log(response);
     } catch (error) {
       console.log(error);
+      toast({
+        title: error,
+        status: "error",
+        duration: 5000,
+        isClosable: "true",
+        position: "top",
+        variant: "subtle",
+      });
+      navigate("/signup");
     }
   }
   return (
@@ -35,7 +46,7 @@ function Login() {
         <form onSubmit={handleSubmit}>
           <h2 className="heading">Log In</h2>
 
-          <div className="inputBox">
+          {/* <div className="inputBox">
             <input
               type="text"
               required="required"
@@ -43,7 +54,7 @@ function Login() {
             />
             <span>Username</span>
             <i></i>
-          </div>
+          </div> */}
 
           <div className="inputBox">
             <input
