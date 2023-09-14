@@ -2,21 +2,24 @@ import React, { useEffect, useState } from "react";
 import "./MyChat.scss";
 import Search from "../search/Search";
 import ChatListItem from "../chatListItem/ChatListItem";
+import Avatar from "../avatar/Avatar";
+import MyProfile from "../myProfile/MyProfile";
+import GroupChatModal from "../miscellaneous/GroupChatModal";
 import { useDispatch, useSelector } from "react-redux";
 import { getMyChat, setSelectedChat } from "../../redux/slices/chatSlice";
 import { getLoggedUser } from "../../redux/slices/authSlice";
-import GroupChatModal from "../miscellaneous/GroupChatModal";
 import { axiosClient } from "../../utils/axiosClient";
-import Avatar from "../avatar/Avatar";
 
 function MyChat() {
   const dispatch = useDispatch();
-  const myChatData = useSelector((state) => state.chatDataReducer.myChatData);
-  const loggedUser = useSelector((state) => state.authDataReducer.loggedUser);
-  const fetchAgain = useSelector((state) => state.chatDataReducer.fetchAgain);
   const [loading, setLoading] = useState(false);
   const [searchText, setSearchText] = useState("");
   const [searchResult, setSearchResult] = useState([]);
+  const [openMyprofile, setOpenMyprofile] = useState(false);
+
+  const myChatData = useSelector((state) => state.chatDataReducer.myChatData);
+  const loggedUser = useSelector((state) => state.authDataReducer.loggedUser);
+  const fetchAgain = useSelector((state) => state.chatDataReducer.fetchAgain);
 
   const handleSearch = async (query) => {
     setSearchText(query);
@@ -66,10 +69,13 @@ function MyChat() {
     <div className="mychat">
       <div className="mychat-box">
         <div className="navBar">
-          <div className="myProfile">
+          <div
+            className="profile"
+            onClick={() => setOpenMyprofile(!openMyprofile)}
+          >
             <Avatar src={loggedUser?.pic} />
           </div>
-          <Search onChange={handleSearch} />
+          <Search onChange={handleSearch} searchText={searchText}/>
         </div>
 
         {loading ? (
@@ -115,6 +121,13 @@ function MyChat() {
           </>
         )}
       </div>
+      {console.log(openMyprofile)}
+      {openMyprofile && (
+        <MyProfile
+          loggedUser={loggedUser}
+          onClose={() => setOpenMyprofile(false)}
+        />
+      )}
     </div>
   );
 }

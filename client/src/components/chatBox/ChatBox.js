@@ -31,15 +31,18 @@ function ChatBox() {
   const [socketConnected, setSocketConnected] = useState(false);
   const [typing, setTyping] = useState(false);
   const [isTyping, setIsTyping] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isClicked, setIsClicked] = useState(false);
 
   const fetchAgain = useSelector((state) => state.chatDataReducer.fetchAgain);
   const loggedUser = useSelector((state) => state.authDataReducer.loggedUser);
-  const dispatch = useDispatch();
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const toast = useToast();
   const selectedChat = useSelector(
     (state) => state.chatDataReducer.selectedChat
   );
+
+  const dispatch = useDispatch();
+  const toast = useToast();
+
   const [emojiPickerVisible, setEmojiPickerVisible] = useState(false);
   const [selectedEmoji, setSelectedEmoji] = useState("");
 
@@ -101,9 +104,10 @@ function ChatBox() {
   };
 
   const sendMessage = async (event) => {
-    if (event.key == "Enter" && newMessage) {
+    if ((event.key === "Enter" || event.type === "click") && newMessage) {
       socket.emit("stop typing", selectedChat?._id);
       setNewMessage(""); //it will not make it empty immediately, due to async
+      // setIsClicked(false);
       try {
         const data = await axiosClient.post("/message/", {
           chatId: selectedChat?._id,
@@ -126,6 +130,7 @@ function ChatBox() {
       }
     }
   };
+
   const typingHandler = (e) => {
     setNewMessage(e.target.value);
 
@@ -167,22 +172,35 @@ function ChatBox() {
                 }
               />
             </div>
-            {selectedChat.isGroupChat ? (
-              <>
-                <UpdateGroupChatModal
-                  isOpen={isModalOpen}
-                  onClose={handleCloseModal}
-                  fetchMessages={fetchMessages}
-                >
-                  <span className="group-name" onClick={handleOpenModal}>
-                    {selectedChat.chatName.toUpperCase()}
-                  </span>
-                </UpdateGroupChatModal>
-              </>
-            ) : (
-              <>{getSender(loggedUser, selectedChat.users)}</>
-            )}
+
+            <div className="header-nameTyping">
+              {selectedChat.isGroupChat ? (
+                <>
+                  <UpdateGroupChatModal
+                    isOpen={isModalOpen}
+                    onClose={handleCloseModal}
+                    fetchMessages={fetchMessages}
+                  >
+                    <span className="group-name" onClick={handleOpenModal}>
+                      {selectedChat.chatName.toUpperCase()}
+                    </span>
+                  </UpdateGroupChatModal>
+                </>
+              ) : (
+                <>{getSender(loggedUser, selectedChat.users)}</>
+              )}
+              {
+                <div className="typing">
+                  {isTyping && (
+                    <div style={{ fontSize: "12px", color: "gray" }}>
+                      typing...
+                    </div>
+                  )}
+                </div>
+              }
+            </div>
           </div>
+
           <div className="chat-section">
             {loading ? (
               <Spinner
@@ -210,6 +228,7 @@ function ChatBox() {
               display="flex"
               justifyContent="center"
               gap={30}
+              onSubmit={sendMessage}
             >
               <input
                 type="text"
@@ -218,7 +237,7 @@ function ChatBox() {
                 value={newMessage}
                 onChange={typingHandler}
               />
-              <div className="icon">
+              <div className="icon" onClick={sendMessage}>
                 <IoMdSend size={27} />
               </div>
             </FormControl>

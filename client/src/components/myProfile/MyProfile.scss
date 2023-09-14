@@ -1,0 +1,93 @@
+.myProfile {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  z-index: 1;
+
+  .overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba($color: #000000, $alpha: 0.5);
+    z-index: 2;
+  }
+
+  .profile-content {
+    height: 100vh;
+    width: 40%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 30px;
+    background-color: #555;
+    z-index: 3;
+    animation: cartSlider 0.3s ease forwards;
+    transform: translateX(
+      100%
+    ); //initial position of the element before the animation begins
+
+    &.reverse {
+      animation: cartSlider 0.3s ease reverse;
+      transform: translateX(0);
+    }
+
+    .header {
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      width: 100%;
+      height: 50px;
+      background-color: #777;
+      gap: 20px;
+
+      .arrowIcon {
+        cursor: pointer;
+        margin-left: 20px;
+      }
+    }
+
+    img {
+      height: 160px;
+      width: 160px;
+      border-radius: 50%;
+      margin-top: 30px;
+      object-fit: cover;
+    }
+    .about {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 20px;
+      margin-left: 20px;
+
+      h4 {
+        color: grey;
+      }
+    }
+  }
+}
+
+@keyframes cartSlider {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(0);
+  }
+}
+
+@keyframes cartSliderReverse {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-100%);
+  }
+}

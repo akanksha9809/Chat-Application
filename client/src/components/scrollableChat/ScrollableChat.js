@@ -21,7 +21,7 @@ function ScrollableChat({ messages, isGroupChat, isTyping }) {
     <ScrollableFeed>
       {messages &&
         messages.map((msg, ind) => (
-          <div style={{ display: "flex" }} key={msg._id}>
+          <div style={{ display: "flex", marginLeft: "15px" }} key={msg._id}>
             {isGroupChat &&
               (isSameSender(messages, msg, ind, loggedUser) ||
                 isLastMessage(messages, ind, loggedUser._id)) && (
@@ -53,6 +53,7 @@ function ScrollableChat({ messages, isGroupChat, isTyping }) {
                   ind,
                   loggedUser._id
                 ),
+                marginRight: "20px",
                 marginTop: isSameUser(messages, msg, ind, loggedUser._id)
                   ? 3
                   : 10,
@@ -62,7 +63,7 @@ function ScrollableChat({ messages, isGroupChat, isTyping }) {
             </span>
           </div>
         ))}
-      {isTyping && <div color="white">typing...</div>}
+     
     </ScrollableFeed>
   );
 }

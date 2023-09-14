@@ -30,14 +30,14 @@ export const isSameSenderMargin = (messages, msg, ind, userId) => {
     messages[ind + 1].sender._id === msg.sender._id &&
     messages[ind].sender._id !== userId
   )
-    return 3;
+    return 20;
   else if (
     (ind < messages.length - 1 &&
       messages[ind + 1].sender._id !== msg.sender._id &&
       messages[ind].sender._id !== userId) ||
     (ind === messages.length - 1 && messages[ind].sender._id !== userId)
   )
-    return 3;
+    return 15; //removed Avatar
   else return "auto";
 };
 

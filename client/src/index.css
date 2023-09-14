@@ -22,3 +22,24 @@ body {
   --black: #111; /*#181818;*/
   --dark-grey: #212121; /* #1f1f1f;*/
 }
+
+*::-webkit-scrollbar {
+  width: 8px;
+}
+
+*::-webkit-scrollbar-thumb {
+  background-color: rgba(85, 85, 85, 0.7);
+  transition: background-color 0.3s;
+}
+
+*::-webkit-scrollbar-thumb:hover {
+  background-color: #555;
+}
+
+*::-webkit-scrollbar-thumb:active {
+  background-color: #777;
+}
+
+*::-webkit-scrollbar-track {
+  background: transparent;
+}
